@@ -150,3 +150,14 @@ export const addTaskComment = asyncHandler(
       .json(new ApiResponse(200, task, "Comment added successfully"));
   }
 );
+
+export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const tasks = await Task.find();
+    return res
+      .status(200)
+      .json(new ApiResponse(200, tasks, "Tasks retrieved successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Internal Server Error");
+  }
+})

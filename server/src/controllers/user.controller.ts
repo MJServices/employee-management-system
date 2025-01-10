@@ -244,3 +244,12 @@ export const checkUserRole = asyncHandler(async (req: Request, res: Response) =>
     .status(200)
     .json(new ApiResponse(200, { user }, "User details retrieved successfully"));
 });
+
+export const getAllUsers = asyncHandler(async (req: Request, res: Response)=>{
+  try {
+    const allUser = await User.find({});
+    return res.status(200).json(new ApiResponse(200, allUser, "User retrieved successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Something went wrong");
+  }  
+})

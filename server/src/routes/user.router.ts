@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { checkUserRole, createUser, loginUser, logoutUser } from "../controllers/user.controller.js";
-import verifyRole from "../middlewares/verifyRole.middleware.ts";
+import { checkUserRole, createUser, getAllUsers, loginUser, logoutUser } from "../controllers/user.controller.js";
+import verifyRole from "../middlewares/verifyRole.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
@@ -16,7 +16,7 @@ router.route("/create").post(
     ]),
     createUser
 );
-
+router.route("/getAll").get(verifyRole, getAllUsers);
 const userRouter = router;
 
 export default userRouter;

@@ -8,7 +8,6 @@ const connectDB = async () => {
             throw new Error("MONGO_URI is not defined in environment variables");
         }
 
-        // Ensure the URI has the correct prefix
         const uri = mongoUri.startsWith("mongodb://") || mongoUri.startsWith("mongodb+srv://") 
             ? mongoUri 
             : `mongodb://${mongoUri}`;
