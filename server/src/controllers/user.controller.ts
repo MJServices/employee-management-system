@@ -111,7 +111,9 @@ interface MulterRequest extends Request {
 export const createUser = asyncHandler(async (_: Request, res: Response) => {
   const req = _ as MulterRequest;
   const avatarLocalPath = await req.files?.avatar?.[0]?.path;
+  console.log(avatarLocalPath);
   const coverImageLocalPath = await req.files?.coverImage?.[0]?.path;
+  console.log(coverImageLocalPath);
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required");
   }

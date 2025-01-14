@@ -6,6 +6,7 @@ import App from "./App";
 import Home from "./components/Home/Home";
 import Logincomponent from "./components/Login/Logincomponent";
 import Dashbard from "./components/Dashboard/Dashbard";
+import SignUpComponent from "./components/create/createSignup";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashbard/>,
+      },
+      {
+        path: "/create",
+        element: <SignUpComponent/>
       },
       {
         path: "/home",

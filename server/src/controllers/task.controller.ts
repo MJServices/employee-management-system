@@ -85,6 +85,7 @@ export const getTasks = asyncHandler(async (req: Request, res: Response) => {
   const user = (await User.findById(id)) as userI;
   const tasks = await Promise.all(
     user.todayTasks.map(async (_id) => {
+      console.log(_id)
       const task = await Task.findById(_id)
         .populate("selectedUsers", "username email")
         .populate("assignedBy", "username")
@@ -95,9 +96,9 @@ export const getTasks = asyncHandler(async (req: Request, res: Response) => {
       if (task.status) task.status = task.status;
       if (task.priority) task.priority = task.priority;
       if (task.dueDate) task.dueDate = task.dueDate;
-      return task;
     })
   );
+  console.log(tasks)
   return res
     .status(200)
     .json(new ApiResponse(200, tasks, "Tasks retrieved successfully"));

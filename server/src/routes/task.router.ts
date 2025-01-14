@@ -6,7 +6,7 @@ const router = Router();
 
 // Admin routes
 router.route("/create").post(verifyRole, createTask);
-router.route("/").get(getTasks);
+router.route("/g").get(getTasks);
 router.route("/getAll").get(verifyRole, getAllTasks);
 
 // User routes
