@@ -24,25 +24,26 @@ interface userI extends mongoose.Document {
 }
 
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, dueDate, priority, assignToAll, selectedUsers } =
-    req.body;
+  const { title, description, dueDate, priority, assignToAll = false, selectedUsers } = req.body;
 
   if (!title || !description || !dueDate) {
     throw new ApiError(400, "All fields are required");
   }
 
-  let usersToAssign: userI[] = [];
+  let usersToAssign: any[] = [];
 
-  // Find users first
   if (assignToAll) {
     usersToAssign = await User.find({ role: { $ne: "admin" } });
-  } else if (selectedUsers && selectedUsers.length > 0) {
+  } else if (Array.isArray(selectedUsers) && selectedUsers.length > 0) {
     if (typeof selectedUsers[0] === "string") {
-      const users = await User.find({ _id: { $in: selectedUsers } });
-      if (!users || users.length === 0) {
-        throw new ApiError(404, "Selected users not found");
-      }
-      usersToAssign = users;
+      const userPromises = selectedUsers.map(async (username: string) => {
+        const user = await User.findOne({ username });
+        if (!user) {
+          throw new ApiError(404, `User ${username} not found`);
+        }
+        return user;
+      });
+      usersToAssign = await Promise.all(userPromises);
     } else {
       usersToAssign = selectedUsers;
     }
@@ -50,24 +51,24 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, "Please specify users to assign the task");
   }
 
-  const coded = req.cookies.accessToken;
-  const decoded: decodeI = jwt.verify(
-    coded,
-    process.env.ACCESS_TOKEN_SECRET!
-  ) as decodeI;
+  if (!usersToAssign || usersToAssign.length === 0) {
+    throw new ApiError(400, "No valid users found to assign the task");
+  }
 
-  // Create task first
+  const coded = req.cookies.accessToken;
+  const decoded: decodeI = jwt.verify(coded, process.env.ACCESS_TOKEN_SECRET!) as decodeI;
+  console.log(usersToAssign)
   const task = await Task.create({
     title,
     description,
     dueDate,
     priority,
-    assignedTo: usersToAssign,
+    selectedUsers: usersToAssign,
     assignedBy: decoded._id,
   });
 
   await Promise.all(
-    usersToAssign.map(async (user) => {
+    usersToAssign.map(async (user: any) => {
       user.todayTasks.push(task._id);
       await user.save();
     })
@@ -78,13 +79,14 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(201, task, "Task created successfully"));
 });
 
+
 export const getTasks = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.query;
   const user = (await User.findById(id)) as userI;
   const tasks = await Promise.all(
     user.todayTasks.map(async (_id) => {
       const task = await Task.findById(_id)
-        .populate("assignedTo", "username email")
+        .populate("selectedUsers", "username email")
         .populate("assignedBy", "username")
         .sort({ createdAt: -1 });
       if (!task) {

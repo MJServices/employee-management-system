@@ -13,7 +13,6 @@ const connectDB = async () => {
             : `mongodb://${mongoUri}`;
 
         const connectionInstance = await mongoose.connect(uri);
-        
         return connectionInstance;
     } catch (error) {
         console.error("MongoDB connection failed:", error);

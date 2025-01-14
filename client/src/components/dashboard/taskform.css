@@ -1,0 +1,51 @@
+.input-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: #fff;
+    transition: border-color 0.3s;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #3b82f6; /* Tailwind's blue-500 */
+  }
+  
+  .input-label {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    color: #a1a1aa; /* Tailwind's gray-400 */
+    transition: 0.2s ease all;
+  }
+  
+  .input-field:focus + .input-label,
+  .input-field:not(:placeholder-shown) + .input-label {
+    top: -0.5rem;
+    left: 0.75rem;
+    font-size: 0.75rem;
+    color: #3b82f6; /* Tailwind's blue-500 */
+  }
+  
+  .input-highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: #3b82f6; /* Tailwind's blue-500 */
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .input-field:focus ~ .input-highlight,
+  .input-field:not(:placeholder-shown) ~ .input-highlight {
+    transform: scaleX(1);
+  }

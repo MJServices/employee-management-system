@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema(
       enum: ["LOW", "MEDIUM", "HIGH"],
       default: "MEDIUM",
     },
-    assignedTo: [{
+    selectedUsers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

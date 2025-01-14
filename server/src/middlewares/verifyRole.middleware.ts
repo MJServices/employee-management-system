@@ -4,7 +4,6 @@ import { User } from "../models/user.model.ts";
 import { ApiError } from "../utils/apiError.ts";
 
 const verifyRole = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("hey")
     const token = req.cookies.accessToken;
     if (!token) {
         throw new ApiError(401, "No token provided");

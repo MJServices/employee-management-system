@@ -4,8 +4,7 @@ import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import jwt, { JwtPayload } from "jsonwebtoken"
-
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 interface decodeI extends JwtPayload {
   _id: string;
@@ -211,12 +210,9 @@ export const logoutUser = asyncHandler(async (_, res) => {
     cookie,
     process.env.ACCESS_TOKEN_SECRET!
   ) as decodeI;
-  const user = await User.findByIdAndUpdate(
-    decoded._id,
-    {
-      new: true,
-    }
-  );
+  const user = await User.findByIdAndUpdate(decoded._id, {
+    new: true,
+  });
 
   const options = {
     httpOnly: true,
@@ -227,29 +223,56 @@ export const logoutUser = asyncHandler(async (_, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {user}, "User logged Out"));
+    .json(new ApiResponse(200, { user }, "User logged Out"));
 });
 
-export const checkUserRole = asyncHandler(async (req: Request, res: Response) => {
-  const cookie = req.cookies.accessToken;
-  const decoded: decodeI = jwt.verify(
-    cookie,
-    process.env.ACCESS_TOKEN_SECRET!
-  ) as decodeI;
-  const user = await User.findById(decoded._id);
-  if (!user) {
-    throw new ApiError(404, "User not found");
+export const getUserById = asyncHandler(
+  async (req: Request, res: Response) => {
+    const {_id} = await req.body
+    const user = await User.find({_id: {$in: _id}});
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, { user }, "User details retrieved successfully")
+      );
   }
-  return res
-    .status(200)
-    .json(new ApiResponse(200, { user }, "User details retrieved successfully"));
-});
+);
 
-export const getAllUsers = asyncHandler(async (req: Request, res: Response)=>{
+export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   try {
     const allUser = await User.find({});
-    return res.status(200).json(new ApiResponse(200, allUser, "User retrieved successfully"));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, allUser, "User retrieved successfully"));
   } catch (error) {
     throw new ApiError(500, "Something went wrong");
-  }  
-})
+  }
+});
+
+export const getUserFromCookie = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    console.log("hello ")
+    const token = req.cookies.accessToken;
+    if (!token) {
+      throw new ApiError(401, "No token provided");
+    }
+    const decoded = (await jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET!
+    )) as { _id: string; role: string };
+    const user = await User.findById(decoded._id);
+
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { user }, "User details retrieved successfully"));
+  } catch (error) {
+    throw new ApiError(401, "Invalid token");
+  }
+});

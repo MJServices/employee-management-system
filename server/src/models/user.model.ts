@@ -13,6 +13,7 @@ interface IUser extends Document {
   history: mongoose.Types.ObjectId[];
   password: string;
   refreshToken?: string;
+  selectedUsers: Array<string>;
   isPasswordCorrect(password: string): Promise<boolean>;
   generateAccessToken(): string;
 }
@@ -22,6 +23,11 @@ const userSchema = new Schema<IUser>(
     role: {
         type: String,
         default: "Employee"
+    },
+    selectedUsers: {
+      type: [String],
+      default: [],
+      required: true
     },
     username: {
       type: String,
