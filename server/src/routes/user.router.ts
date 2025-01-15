@@ -8,6 +8,7 @@ const router = Router();
 router.route("/getuser").post(getUserById);
 router.route("/logout").get(logoutUser);
 router.route("/login").post(loginUser);
+router.route("/getcookie").get(getUserFromCookie)
 router.route("/create").post(
     verifyRole,
     upload.fields([
@@ -17,7 +18,6 @@ router.route("/create").post(
     createUser
 );
 router.route("/getAll").get(verifyRole, getAllUsers);
-router.route("/getcookie").get(getUserFromCookie)
 const userRouter = router;
 
 export default userRouter;

@@ -24,7 +24,14 @@ interface userI extends mongoose.Document {
 }
 
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, dueDate, priority, assignToAll = false, selectedUsers } = req.body;
+  const {
+    title,
+    description,
+    dueDate,
+    priority,
+    assignToAll = false,
+    selectedUsers,
+  } = req.body;
 
   if (!title || !description || !dueDate) {
     throw new ApiError(400, "All fields are required");
@@ -56,8 +63,11 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const coded = req.cookies.accessToken;
-  const decoded: decodeI = jwt.verify(coded, process.env.ACCESS_TOKEN_SECRET!) as decodeI;
-  console.log(usersToAssign)
+  const decoded: decodeI = jwt.verify(
+    coded,
+    process.env.ACCESS_TOKEN_SECRET!
+  ) as decodeI;
+  console.log(usersToAssign);
   const task = await Task.create({
     title,
     description,
@@ -79,30 +89,34 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(201, task, "Task created successfully"));
 });
 
-
 export const getTasks = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.query;
   const user = (await User.findById(id)) as userI;
+
+  if (!user || !user.todayTasks) {
+    return res.status(404).json(new ApiResponse(404, [], "User or tasks not found"));
+  }
+
   const tasks = await Promise.all(
     user.todayTasks.map(async (_id) => {
-      console.log(_id)
       const task = await Task.findById(_id)
         .populate("selectedUsers", "username email")
         .populate("assignedBy", "username")
         .sort({ createdAt: -1 });
+
       if (!task) {
-        throw new ApiError(404, "Task not found");
+        console.log(`${_id} is not found`);
       }
-      if (task.status) task.status = task.status;
-      if (task.priority) task.priority = task.priority;
-      if (task.dueDate) task.dueDate = task.dueDate;
+
+      return task;
     })
   );
-  console.log(tasks)
+
   return res
     .status(200)
     .json(new ApiResponse(200, tasks, "Tasks retrieved successfully"));
 });
+
 
 export const submitTask = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.query;
@@ -163,4 +177,4 @@ export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
   } catch (error) {
     throw new ApiError(500, "Internal Server Error");
   }
-})
+});
