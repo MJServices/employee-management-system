@@ -111,10 +111,13 @@ const Home = () => {
   return (
     <section className="min-h-screen bg-zinc-900 p-10">
       <div className="max-w-screen-lg mx-auto">
-        <h1 className="text-4xl text-white text-center mb-10">Task List</h1>
+        <h1 className="text-4xl md:text-5xl text-zinc-400 font-semibold text-center mb-10 md:mb-16">Task List</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {Array.isArray(tasks) && tasks.length > 0 ? (
-            tasks.map((task) => (
+            tasks
+            .slice() 
+            .reverse() 
+            .map((task) => (
               <div
                 key={task._id}
                 className="bg-zinc-800 rounded-lg shadow-xl p-6 hover:scale-105 transition-transform transform duration-200 ease-in-out"

@@ -5,7 +5,7 @@ interface Task {
   _id: string;
   title: string;
   description: string;
-  selectedUsers: string[]; // Selected users for this task
+  selectedUsers: string[]; 
 }
 
 interface TaskCardProps {
@@ -14,7 +14,7 @@ interface TaskCardProps {
     title: string;
     description: string;
     assignedBy: string;
-    selectedUsers: string[]; // Selected users for this task
+    selectedUsers: string[];
     comments: string[];
     createdAt: string;
     dueDate: string;
@@ -23,17 +23,15 @@ interface TaskCardProps {
     status: string;
     updatedAt: string;
   };
-  users: { _id: string; username: string }[]; // Array of users to map selectedUsers
+  users: { _id: string; username: string }[]; 
   onEdit: () => void;
   onDelete: () => void;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, users, onEdit, onDelete }) => {
-  // Get the usernames corresponding to selectedUsers
   const [assignedUsernames, setAssignedUsernames] = useState<string[]>([]);
 
   useEffect(() => {
-    // Map selected user IDs to usernames based on the users array
     const usernames = task.selectedUsers.map(
       (userID) => users.find((user) => user._id === userID)?.username || "Unknown User"
     );
@@ -68,7 +66,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, users, onEdit, onDelete }) =>
           </span>
         </div>
 
-        {/* Render assigned users as a list */}
         <div className="text-gray-400 mb-2">
           Assigned to:
           <ul className="list-disc pl-5">
@@ -89,24 +86,33 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, users, onEdit, onDelete }) =>
 };
 
 interface TaskListProps {
-  tasks: Task[]; // Array of tasks
-  users: { _id: string; username: string }[]; // Array of users to map selectedUsers
+  tasks: Task[]; 
+  users: { _id: string; username: string }[]; 
+}
+
+interface TaskListProps {
+  tasks: Task[]; 
+  users: { _id: string; username: string }[]; 
 }
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, users }) => {
   return (
     <div className="flex flex-wrap gap-12 mt-10">
-      {tasks.map((task: Task, index: number) => (
-        <TaskCard
-          key={index}
-          task={task}
-          users={users} // Pass users to TaskCard
-          onEdit={() => console.log("Edit Task")}
-          onDelete={() => console.log("Delete Task")}
-        />
-      ))}
+      {tasks
+        .slice() 
+        .reverse() 
+        .map((task: Task, index: number) => (
+          <TaskCard
+            key={index}
+            task={task}
+            users={users}
+            onEdit={() => console.log("Edit Task")}
+            onDelete={() => console.log("Delete Task")}
+          />
+        ))}
     </div>
   );
 };
 
 export default TaskList;
+

@@ -256,7 +256,6 @@ export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
 
 export const getUserFromCookie = asyncHandler(async (req: Request, res: Response) => {
   try {
-    console.log("hello ")
     const token = req.cookies.accessToken;
     if (!token) {
       throw new ApiError(401, "No token provided");
