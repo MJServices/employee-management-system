@@ -95,13 +95,13 @@ const AssignTaskForm: React.FC<AssignTaskFormProps> = ({ onSubmit }) => {
           </div>
 
           <div>
-            <label className="block text-lg text-gray-300 mb-1">Assign To (comma separated)</label>
+            <label className="block text-lg text-gray-300 mb-1">Assign To</label>
             <input
               value={selectedUsers.join(", ")} 
               onChange={handleUserChange}
               className="text-lg py-3 px-4 w-full rounded bg-zinc-800 border border-gray-700 focus:border-emerald-500 outline-none"
               type="text"
-              placeholder="Employee names or IDs (comma separated)"
+              placeholder="Employee name or ID"
             />
           </div>
 

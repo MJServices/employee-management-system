@@ -16,6 +16,7 @@ interface IUser extends Document {
   selectedUsers: Array<string>;
   isPasswordCorrect(password: string): Promise<boolean>;
   generateAccessToken(): string;
+  timeRemaining: string
 }
 
 const userSchema = new Schema<IUser>(
@@ -67,6 +68,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, "Password is required"],
     },
+    timeRemaining: {
+      default: "",
+      type: String,
+    }
   },
   {
     timestamps: true,

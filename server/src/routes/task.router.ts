@@ -11,6 +11,6 @@ router.route("/getAll").get(verifyRole, getAllTasks);
 
 // User routes
 router.route("/submitTask").patch(submitTask);
-// router.route("/comment/:taskId/").post(addTaskComment);
+router.route("/comment/:taskId/").post(addTaskComment);
 
 export default router;

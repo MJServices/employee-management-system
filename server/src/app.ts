@@ -3,6 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import userRouter from "./routes/user.router.ts"
 import taskRouter from "./routes/task.router.js";
+import timerRouter from "./routes/timer.router.ts";
 
 const app = express()
 
@@ -18,5 +19,6 @@ app.use(cookieParser())
 
 app.use("/api/v1/user/", userRouter)
 app.use("/api/v1/tasks/", taskRouter);
+app.use("/api/v1/timer/", timerRouter);
 
 export {app}

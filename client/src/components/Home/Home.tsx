@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Timer from "../Animations/timer";
 
 interface Task {
   _id: string;
@@ -18,8 +19,9 @@ interface User {
 const Home = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [id, setId] = useState("");
 
-  const submitTask =  async (id: string) => {
+  const submitTask = async (id: string) => {
     if (!id) {
       console.log("User not available yet");
       return;
@@ -32,7 +34,7 @@ const Home = () => {
     });
     const data = await res.json();
     console.log("Task submitted:", data.data);
-  }
+  };
   const findTasks = async () => {
     if (!user?._id) {
       console.log("User not available yet");
@@ -40,6 +42,7 @@ const Home = () => {
     }
 
     try {
+      setId(user._id);
       const res = await fetch(`/api/v1/tasks/g?id=${user._id}`, {
         method: "GET",
         headers: {
@@ -109,59 +112,67 @@ const Home = () => {
   };
 
   return (
-    <section className="min-h-screen bg-zinc-900 p-10">
-      <div className="max-w-screen-lg mx-auto">
-        <h1 className="text-4xl md:text-5xl text-zinc-400 font-semibold text-center mb-10 md:mb-16">Task List</h1>
+    <section className="min-h-screen bg-zinc-900 p-10"> 
+      <Timer value={28800 / 60} padding={2} duration={0.9} userId={id || ""} />
+      <section className="max-w-screen-lg mx-auto                        ">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {Array.isArray(tasks) && tasks.length > 0 ? (
             tasks
-            .slice() 
-            .reverse() 
-            .map((task) => (
-              <div
-                key={task._id}
-                className="bg-zinc-800 rounded-lg shadow-xl p-6 hover:scale-105 transition-transform transform duration-200 ease-in-out"
-              >
-                <h2 className="text-2xl font-semibold text-white mb-3">
-                  {task.title}
-                </h2>
-                <p className="text-gray-400 mb-4 max-w-full h-auto">
-                  {task.description}
-                </p>
-                <p className="text-[royalblue] my-2">Task Status: {task.status}</p>
-                <p>
-                  {task.selectedUsers.map((user) => (
-                    <div className="inline-block mb-2 text-zinc-300">
-                      Assigned to: {user.username}
-                    </div>
-                  ))}
-                </p>
-
-                <p className="block mb-2 text-zinc-300">
-                  Assigned By: {task.assignedBy.username}
-                </p>
-
-                <div className="cont flex justify-between mt-4 relative">
-                  <div
-                    className={`font-medium py-1 rounded-full flex justify-center items-center px-5 text-sm ${getPriorityBadgeColor(
-                      task.priority
-                    )}`}
-                  >
-                    {task.priority}
+              .slice()
+              .reverse()
+              .map((task) => (
+                <div
+                  key={task._id}
+                  className="bg-zinc-800 rounded-lg shadow-2xl p-8 hover:scale-105 transform transition-transform duration-200 ease-in-out max-w-lg h-full"
+                >
+                  <h2 className="text-3xl font-semibold text-white mb-4">
+                    {task.title}
+                  </h2>
+                  <p className="text-gray-400 mb-6 leading-relaxed">
+                    {task.description}
+                  </p>
+                  <p className="text-[royalblue] mb-4">
+                    Task Status: {task.status}
+                  </p>
+                  <div>
+                    {task.selectedUsers.map((user) => (
+                      <div
+                        key={user._id}
+                        className="inline-block text-zinc-300 mb-2"
+                      >
+                        Assigned to: {user.username}
+                      </div>
+                    ))}
                   </div>
-                  <button className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200 ease-in-out" onClick={() => submitTask(task._id)}>
-                    Submit
-                  </button>
+
+                  <p className="text-zinc-300 mb-4">
+                    Assigned By: {task.assignedBy.username}
+                  </p>
+
+                  <div className="flex justify-between items-center mt-6">
+                    <div
+                      className={`font-medium py-2 px-6 rounded-full text-sm ${getPriorityBadgeColor(
+                        task.priority
+                      )}`}
+                    >
+                      {task.priority}
+                    </div>
+                    <button
+                      className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
+                      onClick={() => submitTask(task._id)}
+                    >
+                      Submit
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <p className="text-white text-center col-span-3">
               No tasks available.
             </p>
           )}
         </div>
-      </div>
+      </section>
     </section>
   );
 };
