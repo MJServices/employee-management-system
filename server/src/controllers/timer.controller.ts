@@ -41,3 +41,23 @@ export const getTime = asyncHandler(async (req: Request, res: Response) => {
         throw new ApiError(error.status, error.message);
       }
 });
+
+export const endTime = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const { id } = req.query;
+    console.log(id, "hey")
+    if (!id) {
+      throw new ApiError(400, "Missing required fields");
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+    user.timeRemaining = "0";
+    await user.save({ validateBeforeSave: false });
+
+    return res.status(200).json(new ApiResponse(200, user, "successfully time saved"));
+  } catch (error: any) {
+    throw new ApiError(error.status, error.message);
+  }
+});

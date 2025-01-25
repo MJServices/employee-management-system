@@ -55,7 +55,6 @@ const Home = () => {
       const data = await res.json();
       console.log("Fetched Tasks:", data.data);
       if (Array.isArray(data.data)) {
-        // Filter out null or invalid tasks before setting state
         const validTasks = data.data.filter(
           (task: Task | null) => task !== null
         );

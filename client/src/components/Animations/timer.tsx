@@ -12,7 +12,8 @@ const Timer = ({
   duration: number;
   userId: string;
 }) => {
-  const [timeRemaining, setTimeRemaining] = useState<number>(value * 60);
+  const [localUserId, setLocalUserId] = useState<string>(userId); // State to store userId
+  const [timeRemaining, setTimeRemaining] = useState<any>(value * 60);
   const [formattedTime, setFormattedTime] = useState<string>("");
   const [running, setRunning] = useState<boolean>(true);
   const [onClick, setOnClick] = useState<boolean>(false);
@@ -21,8 +22,8 @@ const Timer = ({
     if (onClick) {
       const saveTime = async () => {
         try {
-          const response = await axios.post(`/api/v1/timer/save?id=${userId}`, {
-            timeRemaining,
+          const response = await axios.post(`/api/v1/timer/save?id=${localUserId}`, {
+            timeRemaining: timeRemaining.toString(),
           });
           const data = response.data;
           console.log(data);
@@ -32,15 +33,16 @@ const Timer = ({
       };
       saveTime();
     }
-  }, [onClick]);
+  }, [onClick, localUserId, timeRemaining]);
 
   useEffect(() => {
     if (!running) return;
-
     const interval = setInterval(() => {
-      setTimeRemaining((prev) => {
+      setTimeRemaining((prev: number) => {
         if (prev <= 0) {
           clearInterval(interval);
+          setRunning(false);
+          setOnClick(true);
           return 0;
         }
         return prev - 1;
@@ -48,7 +50,7 @@ const Timer = ({
     }, duration * 1000);
 
     return () => clearInterval(interval);
-  }, [duration, running]);
+  }, [duration, running, localUserId]);
 
   useEffect(() => {
     const hours = String(Math.floor(timeRemaining / 3600)).padStart(padding, "0");
@@ -63,8 +65,8 @@ const Timer = ({
   useEffect(() => {
     const fetchTime = async () => {
       try {
-        if (userId) {
-          const response = await axios.post(`/api/v1/timer/get?id=${userId}`);
+        if (localUserId) {
+          const response = await axios.post(`/api/v1/timer/get?id=${localUserId}`);
           const savedTime = response.data.data.timeRemaining;
           if (savedTime) {
             setTimeRemaining(savedTime);
@@ -75,6 +77,12 @@ const Timer = ({
       }
     };
     fetchTime();
+  }, [localUserId]);
+
+  useEffect(() => {
+    if (userId) {
+      setLocalUserId(userId);
+    }
   }, [userId]);
 
   const toggleTimer = () => {
