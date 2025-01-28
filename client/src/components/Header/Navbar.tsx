@@ -34,7 +34,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar w-full h-20 flex justify-between items-center px-8 bg-zinc-900 text-gray-100 shadow-md">
+    <nav className="navbar max-w-full h-20 flex justify-between items-center px-8 bg-zinc-900 text-gray-100 shadow-md">
       <section className="logo">
         <h1 className="leading-tight">
           <div className="text-3xl font-bold text-blue-400">MINI</div>
@@ -42,7 +42,7 @@ function Navbar() {
         </h1>
       </section>
 
-      <section className="btn-cont flex items-center space-x-4">
+      <section className="btn-cont flex items-center md:space-x-4 space-x-1">
         {user ? (
           <>
             {user.role === "admin" && (

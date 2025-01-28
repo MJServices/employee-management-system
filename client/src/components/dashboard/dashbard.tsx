@@ -72,12 +72,12 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="bg-zinc-800">
-      <div className="container p-4 mx-auto">
-        <AssignTaskForm onSubmit={handleAssignTask} />
-        <TaskList tasks={tasks} users={users} />
+      <div className="bg-zinc-800">
+        <div className="container p-4 mx-auto">
+          <AssignTaskForm onSubmit={handleAssignTask} />
+          <TaskList tasks={tasks} users={users} />
+        </div>
       </div>
-    </div>
   );
 };
 

@@ -5,8 +5,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Home from "./components/Home/Home";
 import Logincomponent from "./components/Login/Logincomponent";
-import Dashbard from "./components/Dashboard/Dashbard";
+import AdminDashboard from "./components/Dashboard/Dashbard";
 import SignUpComponent from "./components/Create/createSignup";
+import ProgressPage from "./components/Progress/ProgressPage";
+import DashboardLayout from "./components/Dashboard/dashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -15,25 +17,34 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Logincomponent/>,
+        element: <Logincomponent />,
       },
       {
         path: "/dashboard",
-        element: <Dashbard/>,
+        element: <DashboardLayout>,
+          <AdminDashboard />
+        </DashboardLayout>,
+      },
+      {
+        path: "/progress",
+        element: <DashboardLayout>
+          <ProgressPage />
+        </DashboardLayout>,
       },
       {
         path: "/create",
-        element: <SignUpComponent/>
+        element: <SignUpComponent />
       },
       {
         path: "/home",
-       element: <Home/>,
+        element: <Home />,
       }
     ]
   },
 ]);
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router}/> 
+    <RouterProvider router={router} /> 
   </StrictMode>
 );
