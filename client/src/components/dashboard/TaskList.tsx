@@ -24,11 +24,9 @@ interface TaskCardProps {
     updatedAt: string;
   };
   users: { _id: string; username: string }[]; 
-  onEdit: () => void;
-  onDelete: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, users, onEdit, onDelete }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, users}) => {
   const [assignedUsernames, setAssignedUsernames] = useState<string[]>([]);
 
   useEffect(() => {
@@ -104,10 +102,8 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, users }) => {
         .map((task: Task, index: number) => (
           <TaskCard
             key={index}
-            task={task}
+            task={task as any}
             users={users}
-            onEdit={() => console.log("Edit Task")}
-            onDelete={() => console.log("Delete Task")}
           />
         ))}
     </div>

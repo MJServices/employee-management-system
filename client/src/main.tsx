@@ -8,7 +8,7 @@ import Logincomponent from "./components/Login/Logincomponent";
 import AdminDashboard from "./components/Dashboard/Dashbard";
 import SignUpComponent from "./components/Create/createSignup";
 import ProgressPage from "./components/Progress/ProgressPage";
-import DashboardLayout from "./components/Dashboard/dashboardLayout";
+import DashboardLayout from "./components/Dashboard/DashboardLayout";
 
 const router = createBrowserRouter([
   {

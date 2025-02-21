@@ -11,6 +11,7 @@ interface User {
 const ProgressPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  setSearchTerm("hey")
   const resetProgress = async () => {
     try {
       const response = await fetch('/api/v1/timer/reset', {
