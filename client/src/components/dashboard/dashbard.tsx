@@ -69,10 +69,10 @@ const AdminDashboard: React.FC = () => {
 
   const handleAssignTask = (task: Task) => {
     setTasks((prevTasks) => [...prevTasks, task]); 
-  };
+  };   
 
   return (
-      <div className="bg-zinc-800">
+      <div className="bg-zinc-800 rounded-lg shadow-xl">
         <div className="container p-4 mx-auto">
           <AssignTaskForm onSubmit={handleAssignTask} />
           <TaskList tasks={tasks} users={users} />
