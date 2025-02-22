@@ -3,11 +3,11 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import Home from "./components/Home/Home";
-import Logincomponent from "./components/Login/Logincomponent";
+import Home from "./components/Home/Home.tsx";
+import Logincomponent from "./components/Login/Logincomponent.tsx";
 import AdminDashboard from "./components/Dashboard/Dashbard.tsx";
 import SignUpComponent from "./components/Create/createSignup.tsx";
-import ProgressPage from "./components/Progress/ProgressPage";
+import ProgressPage from "./components/Progress/ProgressPage.tsx";
 import DashboardLayout from "./components/Dashboard/DashboardLayout.tsx";
 
 
