@@ -3,13 +3,12 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import Home from "./components/Home/Home.tsx";
-import Logincomponent from "./components/Login/Logincomponent.tsx";
-import AdminDashboard from "./components/Dashboard/Dashbard.tsx";
-import SignUpComponent from "./components/Create/createSignup.tsx";
-import ProgressPage from "./components/Progress/ProgressPage.tsx";
-import DashboardLayout from "./components/Dashboard/DashboardLayout.tsx";
-
+import Home from "./components/Home/Home"
+import Logincomponent from "./components/Login/Logincomponent";
+import AdminDashboard from "./components/Dashboard/Dashbard";
+import SignUpComponent from "./components/Create/createSignup";
+import ProgressPage from "./components/Progress/ProgressPage";
+import DashboardLayout from "./components/Dashboard/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -22,30 +21,34 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <DashboardLayout>,
-          <AdminDashboard />
-        </DashboardLayout>,
+        element: (
+          <DashboardLayout>
+            <AdminDashboard />
+          </DashboardLayout>
+        ),
       },
       {
         path: "/progress",
-        element: <DashboardLayout>
-          <ProgressPage />
-        </DashboardLayout>,
+        element: (
+          <DashboardLayout>
+            <ProgressPage />
+          </DashboardLayout>
+        ),
       },
       {
         path: "/create",
-        element: <SignUpComponent />
+        element: <SignUpComponent />,
       },
       {
         path: "/home",
         element: <Home />,
-      }
-    ]
+      },
+    ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} /> 
+    <RouterProvider router={router} />
   </StrictMode>
 );

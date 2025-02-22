@@ -8,8 +8,8 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "moduleResolution": "node",  // ✅ Changed from "bundler" to "node"
+    "allowImportingTsExtensions": false,  // ✅ No need for `.tsx` in imports
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
@@ -20,7 +20,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Path Aliases */
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["components/*"]
+    }
   },
   "include": ["src"]
 }
