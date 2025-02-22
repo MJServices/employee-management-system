@@ -5,10 +5,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Home from "./components/Home/Home";
 import Logincomponent from "./components/Login/Logincomponent";
-import AdminDashboard from "./components/Dashboard/Dashbard";
-import SignUpComponent from "./components/Create/createSignup";
+import AdminDashboard from "./components/Dashboard/Dashbard.tsx";
+import SignUpComponent from "./components/Create/createSignup.tsx";
 import ProgressPage from "./components/Progress/ProgressPage";
-import DashboardLayout from "./components/Dashboard/DashboardLayout";
+import DashboardLayout from "./components/Dashboard/DashboardLayout.tsx";
 
 
 const router = createBrowserRouter([
