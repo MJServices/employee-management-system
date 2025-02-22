@@ -10,6 +10,7 @@ import SignUpComponent from "./components/Create/createSignup";
 import ProgressPage from "./components/Progress/ProgressPage";
 import DashboardLayout from "./components/Dashboard/DashboardLayout";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
